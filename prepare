@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+./prepare.py $1
+open https://adventofcode.com/2020/day/$1
+open https://adventofcode.com/2020/day/$1/input
+vi $1/input.txt
