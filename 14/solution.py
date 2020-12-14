@@ -24,6 +24,23 @@ with open(sys.argv[1]) as f:
         part = process_input_line(line)
         parts.append(part)
 
+def possibilities(mask, number):
+    if len(mask) == 0 or all(m == '0' for m in mask):
+        yield number
+        return
+    for i, m in enumerate(mask):
+        place = 2 ** (len(mask) - 1 - i)
+        if m == '1':
+            for possibility in possibilities(mask[i+1:], number | place):
+                yield possibility
+            break
+        elif m == 'X':
+            for possibility in possibilities(mask[i+1:], number | place):
+                yield possibility
+            for possibility in possibilities(mask[i+1:], number & ~place):
+                yield possibility
+            break
+
 def solution():
     bits = {}
     mask = ''
@@ -32,20 +49,11 @@ def solution():
             mask = part[1]
         else:
             location, value = part[1:]
-            print(value)
-            print("M: {}".format(mask))
-            print("I: {0:036b}".format(value))
-
-            for i, m in enumerate(mask):
-                place = 2 ** (len(mask) - 1 - i)
-                bit = value & place
-                if m == '1':
-                    value |= place
-                elif m == '0':
-                    if value & place:
-                        value -= place
-            bits[part[1]] = value
-            print("O: {0:036b}".format(value))
+            choices = set(possibilities(mask, location))
+            for choice in choices:
+                bits[choice] = value
+    print(bits)
+    print(sorted(bits.keys()))
     return sum(bits.values())
 
 #print(parts)
