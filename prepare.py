@@ -25,6 +25,8 @@ os.chmod(os.path.join(str(day), 'solution.py'), 0o777)
 
 os.chdir(str(day))
 
+url = "https://www.adventofcode.com/2020/day/{}".format(day)
+
 cookie_str = "_ga=GA1.2.1513356176.1606798608; _gid=GA1.2.526309279.1607617280"
 cookies = {}
 for cookie in cookie_str.split(';'):
