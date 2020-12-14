@@ -15,7 +15,7 @@ with open(sys.argv[1]) as f:
     for line in f:
         line = line.strip()
         part = process_input_line(line)
-        parts.append(line)
+        parts.append(part)
 
 def solution():
     pass
