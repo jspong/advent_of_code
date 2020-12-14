@@ -1,2 +1,0 @@
-#!/bin/bash
-cat test6.txt | python3 solution.py
