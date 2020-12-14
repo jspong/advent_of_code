@@ -5,21 +5,40 @@ import operator
 parts = []
 
 def process_input_line(line):
-    return [int(x) for x in line.split(',') if x != 'x']
+    return [None if x == 'x' else int(x) for x in line.split(',')]
 
 if len(sys.argv) > 1:
     input_ = sys.argv[1]
 else:
     input_ = "input.txt"
 
-start, schedule, ids_ = 0, 0, 0
 with open(sys.argv[1]) as f:
-    start = int(f.readline())
+    _ = int(f.readline())
     schedule = process_input_line(f.readline())
 
-def solution():
-    next_time = [((start // x + i) * x, x) for x in schedule for i in (0,1)]
-    return min(((t, id_) for t, id_ in next_time if t >= start), key=operator.itemgetter(0))
+def gcd(x, y):
+    if y > x: return gcd(y,x)
+    elif y == 0:
+        return x
+    else:
+        return gcd(y, x % y)
 
-x, y = solution()
-print(x, y, (x-start) * y)
+def are_coprime(numbers):
+    print(numbers)
+    numbers = [n for n in numbers if n is not None]
+    print(numbers)
+    for i, x in enumerate(numbers):
+        for y in numbers[i+1:]:
+            if gcd(x, y) != 1:
+                return (x, y)
+    return None
+
+def chinese_remainder(A, M):
+    return
+
+def solution():
+    assert are_coprime(schedule) is None, are_coprime(schedule)
+    a, n = [i for i, x in enumerate(schedule) if x is not None], [x for x in schedule if x is not None]
+    return chinese_remainder(n, a)
+
+print(solution())
