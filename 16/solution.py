@@ -67,7 +67,6 @@ def search(i):
             step = search(i+1)
             if step is None:
                 revert(old_values, i)
-                del choices[name]
                 return None
             else:
                 return step + [(name, i)]
