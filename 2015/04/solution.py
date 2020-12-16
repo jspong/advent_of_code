@@ -42,7 +42,7 @@ def main():
     product = 1
     key = parts[0]
     i = 0
-    while not hashlib.md5('{}{}'.format(key, i).encode()).hexdigest().startswith('00000'):
+    while not hashlib.md5('{}{}'.format(key, i).encode()).hexdigest().startswith('000000'):
         i += 1
     return i
 
