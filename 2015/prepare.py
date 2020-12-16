@@ -48,7 +48,7 @@ with open('test', 'w') as f:
     f.write('#!/bin/bash\npython3 -m unittest solution')
 
 with open('run', 'w') as f:
-    f.write('#!/bin/bash\nINPUT=${1:-input.txt}\ncat ${INPUT} | python3 solution.py')
+    f.write('#!/bin/bash\nINPUT=${1:-input.txt}\npython3 solution.py ${INPUT}')
 
 os.chmod('solution.py', 0o666)
 os.chmod('test', 0o777)
