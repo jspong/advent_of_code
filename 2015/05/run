@@ -1,0 +1,3 @@
+#!/bin/bash
+INPUT=${1:-input.txt}
+cat ${INPUT} | python3 solution.py
