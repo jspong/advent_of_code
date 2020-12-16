@@ -21,16 +21,17 @@ def process_line(state, line, handle, state_transition=lambda x, line: x):
     if state == 0:
         if line.startswith('turn '):
             action, rest = line[5:].split(' ', 1)
-            action = action == 'on'
+            action = 1 if action == 'on' else -1
         else:
             rest = line[len('toggle '):]
-            action = None
+            action = 2
         def parse(section):
             to, from_ = section.split(' through ')
             a = to.split(',')
             b = from_.split(',')
             return ((int(a[0]),int(a[1])), (int(b[0]), int(b[1])))
         part = action, parse(rest)
+        print(part)
 
     elif state == 1:
         pass
@@ -53,16 +54,13 @@ def main():
             state = process_line(state, line, parts.append)
     count = 0
     product = 1
-    board = [[False for _ in range(1000)] for _ in range(1000)]
+    board = [[0 for _ in range(1000)] for _ in range(1000)]
     for part in parts:
         action, to_from = part
         from_, to = to_from
         for x in range(from_[0], to[0]+1):
             for y in range(from_[1], to[1]+1):
-                if action is None:
-                    board[x][y] = not board[x][y]
-                else:
-                    board[x][y] = action
+                board[x][y] = max(0, board[x][y] + action)
     for row in board:
         for cell in row:
             count += cell
