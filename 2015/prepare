@@ -6,7 +6,10 @@ YEAR=2015
 ./prepare.py $1 $YEAR
 open https://adventofcode.com/${YEAR}/day/$1
 open https://adventofcode.com/${YEAR}/day/$1/input
+
 dir=`printf "%02d" $1`
-vi $dir/input.txt
 cd $dir
+vi input.txt
 vim solution.py
+
+set +e

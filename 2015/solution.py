@@ -49,4 +49,4 @@ class Tests(unittest.TestCase):
         self.assertEquals(solution(''), None)
 
 if __name__ == '__main__':
-    main()
+    print(main())
