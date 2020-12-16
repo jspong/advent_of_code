@@ -4,13 +4,14 @@ import unittest
 class Tests(unittest.TestCase):
 
     def test(self):
-        self.assertEquals(solution('>'), 2)
-        self.assertEquals(solution('^>v<'), 4)
-        self.assertEquals(solution('^v^v^v^v^v^v'), 2)
+        self.assertEquals(solution('^v'), 3)
+        self.assertEquals(solution('^>v<'), 3)
+        self.assertEquals(solution('^v^v^v^v^v'), 11)
 
 
 def solution(s):
-    pos = 0, 0
+    santa = 0, 0
+    robo = 0, 0
     steps = {
         '>': (1, 0),
         '<': (-1, 0),
@@ -18,11 +19,21 @@ def solution(s):
         'v': (0, -1)
     }
     visited = set()
-    for c in s:
+    for i, c in enumerate(s):
+        if i % 2 == 0:
+            pos = santa
+        else:
+            pos = robo
         visited.add(pos)
         step = steps.get(c, (0,0))
         pos = pos[0] + step[0], pos[1] + step[1]
-    visited.add(pos)
+        if i % 2 == 0:
+            santa = pos
+        else:
+            robo = pos
+
+    visited.add(robo)
+    visited.add(santa)
     return len(visited)
 
 if __name__ == '__main__':
