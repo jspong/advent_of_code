@@ -20,7 +20,14 @@ class Tests(unittest.TestCase):
         self.assertEquals(solution(')())())'), -3)
 
 def solution(s):
-    return sum(1 if c == '(' else -1 for c in s)
+    floor = 0
+    for i, c in enumerate(s, start=1):
+        if c == '(':
+            floor += 1
+        elif c == ')':
+            floor -= 1
+        if floor == -1:
+            return i
 
 if __name__ == '__main__':
     print(solution(sys.stdin.readline().strip()))
