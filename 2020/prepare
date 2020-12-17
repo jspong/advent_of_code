@@ -1,7 +1,15 @@
 #!/bin/bash
 set -e
 
-./prepare.py $1
-open https://adventofcode.com/2020/day/$1
-open https://adventofcode.com/2020/day/$1/input
-vi $1/input.txt
+YEAR=2020
+
+./prepare.py $1 $YEAR
+open https://adventofcode.com/${YEAR}/day/$1
+open https://adventofcode.com/${YEAR}/day/$1/input
+
+dir=`printf "%02d" $1`
+cd $dir
+vi input.txt
+vim solution.py
+
+set +e

@@ -13,19 +13,23 @@ import sys
 ssl._create_default_https_context = ssl._create_unverified_context
 
 day = int(sys.argv[1])
-print("Preparing day {} of advent of code".format(day))
+if len(sys.argv) > 2:
+    year = int(sys.argv[2])
+else:
+    year = 2020
 
-os.mkdir(str(day), 0o777)
+print("Preparing day {} of advent of code {}".format(day, year))
 
-shutil.copyfile('test.py', os.path.join(str(day), 'test.py'))
-os.chmod(os.path.join(str(day), 'test.py'), 0o777)
+day = '{:02d}'.format(day)
 
-shutil.copyfile('solution.py', os.path.join(str(day), 'solution.py'))
-os.chmod(os.path.join(str(day), 'solution.py'), 0o777)
+os.mkdir(day, 0o777)
+
+shutil.copyfile('solution.py', os.path.join(day, 'solution.py'))
+os.chmod(os.path.join(day, 'solution.py'), 0o777)
 
 os.chdir(str(day))
 
-url = "https://www.adventofcode.com/2020/day/{}".format(day)
+url = "https://www.adventofcode.com/{}/day/{}".format(year, int(day))
 
 cookie_str = "_ga=GA1.2.1513356176.1606798608; _gid=GA1.2.526309279.1607617280"
 cookies = {}
@@ -40,15 +44,12 @@ def download(url):
 
 description = download(url)
 
-soup = BeautifulSoup(description, 'html.parser')
-for i, test in enumerate(soup.find_all('pre'), start=1):
-    with open("test{}.txt".format(i), 'w') as f:
-        f.write(test.get_text())
-    with open("test{}".format(i), 'w') as f:
-        f.write("#!/bin/bash\n./test.py test{}.txt".format(i))
-    os.chmod("test{}".format(i), 0o777)
-
 with open('test', 'w') as f:
-    f.write('#!/bin/bash\npython3 solution.py input.txt')
+    f.write('#!/bin/bash\npython3 -m unittest solution')
 
+with open('run', 'w') as f:
+    f.write('#!/bin/bash\nINPUT=${1:-input.txt}\npython3 solution.py ${INPUT}')
+
+os.chmod('solution.py', 0o666)
 os.chmod('test', 0o777)
+os.chmod('run', 0o777)
