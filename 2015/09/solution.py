@@ -61,7 +61,7 @@ def solution(g):
                 distance = 0
                 for a, b in stagger(path):
                     distance += g[a][b]['weight']
-                if answer is None or distance < answer:
+                if answer is None or distance > answer:
                     answer = distance
     return answer
 
