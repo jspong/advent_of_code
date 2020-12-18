@@ -1,4 +1,10 @@
 #!/usr/local/bin/python3
+import itertools
+import collections
+import re
+import networkx
+import pygraphviz
+from networkx.drawing.nx_agraph import write_dot
 import sys
 import unittest
 
@@ -28,11 +34,13 @@ def process_line(state, line, handle, state_transition=lambda x, line: x):
     return state_transition(state, original)
 
 def solution(line):
-    pass
+    return line
 
 def main():
     state = 0
-    parts = []
+    units = []
+    mapping = {}
+    g = networkx.DiGraph()
     with input_stream() as f:
         for line in f:
             line = line.strip()
@@ -41,7 +49,27 @@ def main():
     product = 1
     for part in parts:
         pass
-    return
+
+    answer = None
+    if units:
+        answer = sum(solution(u) for u in unites)
+    elif mapping:
+        answer = solution(mapping)
+    elif g:
+        answer = solution(g)
+    else:
+        raise Exception()
+
+    if os.environ.get('DEBUG'):
+        print(state)
+        for unit in units:
+            print units
+        for k, v in mapping.items():
+            print(k, v)
+        if g.nodes():
+            write_dot(g, sys.stdout)
+
+    return answer
 
 class Tests(unittest.TestCase):
 
