@@ -79,7 +79,7 @@ def main():
             write_dot(g, sys.stdout)
 
     x = units[0]
-    for _ in range(40):
+    for _ in range(50):
         x = solution(x)
     return len(x)
 
