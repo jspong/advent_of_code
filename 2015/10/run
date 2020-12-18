@@ -1,0 +1,3 @@
+#!/bin/bash
+INPUT=${1:-input.txt}
+python3 solution.py ${INPUT}
