@@ -35,19 +35,12 @@ def process_line(state, line, handle, state_transition=lambda x, line: x):
     return state_transition(state, original)
 
 def solution(line):
-    characters = 0
+    delims = 2
     i = 0
-    while i < len(line):
-        if line[i] == '\\':
-            if line[i+1] == 'x':
-                i += 3
-            elif line[i+1] in '\\"':
-                i += 1
-            else:
-                raise Exception((line, i, line[i+1]))
-        i += 1
-        characters += 1
-    return len(line) - characters + 2
+    for c in line:
+        if c in '\\"':
+            delims += 1
+    return delims
 
 def main():
     state = 0
