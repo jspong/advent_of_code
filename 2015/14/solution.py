@@ -3,6 +3,7 @@ import collections
 import itertools
 import re
 import networkx
+import operator
 import pygraphviz
 from networkx.drawing.nx_agraph import write_dot
 import sys
@@ -34,17 +35,24 @@ def process_line(state, line, handle, state_transition=lambda x, line: x):
     handle(part)
     return state_transition(state, original)
 
-def solution(line):
-    duration = 2503
+def solution(line, duration):
     distance, time, rest = line[1:]
     chunk = distance * time
     block = time + rest
     total_blocks = duration // block
-    extra = duration % block
-    return line[0], (total_blocks * chunk) + (min(time, extra) * distance)
+    extra = min(time, duration % block)
+    return line[0], (total_blocks * chunk) + (extra * distance)
 
 def combine(results):
-    return dict(solution(p) for p in results)
+    standing = collections.defaultdict(int)
+    for i in range(1, 2504):
+        current = dict(solution(line, i) for line in results)
+        winners = sorted(current.items(), key=operator.itemgetter(1), reverse=True)
+        top_score = winners[0][1]
+        for deer, score in winners:
+            if score == top_score:
+                standing[deer] += 1
+    return max(standing.values())
 
 def main():
     state = 0
@@ -70,9 +78,7 @@ def main():
     elif dg.edges():
         result = combine(dg)
 
-    print(result)
-
-    return max(result.values())
+    return result
 
 class Tests(unittest.TestCase):
 
