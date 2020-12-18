@@ -38,6 +38,8 @@ def solution(j):
     if isinstance(j, list):
         return sum(solution(x) for x in j)
     elif isinstance(j, dict):
+        if 'red' in j.values():
+            return 0
         count = 0
         for k,v in j.items():
             try:
@@ -58,7 +60,6 @@ def main():
     g = networkx.DiGraph()
     with input_stream() as f:
         s = f.read()
-        print(repr(s))
         j = json.loads(s)
     return solution(j)
     count = 0
