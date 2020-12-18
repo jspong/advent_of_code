@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
-import itertools
 import collections
+import itertools
 import re
 import networkx
 import pygraphviz
@@ -24,6 +24,8 @@ def process_line(state, line, handle, state_transition=lambda x, line: x):
     part = None
     if state == 0:
         part = line
+
+
     elif state == 1:
         pass
     elif state == 2:
@@ -34,42 +36,41 @@ def process_line(state, line, handle, state_transition=lambda x, line: x):
     return state_transition(state, original)
 
 def solution(line):
-    return line
+    return
+
+def combine(results):
+    if not results:
+        return None
+    value = type(results[0])()
+    for result in results:
+        value += result
+    return value
 
 def main():
     state = 0
-    units = []
+    parts = []
     mapping = {}
-    g = networkx.DiGraph()
+    g = networkx.Graph()
+    dg = networkx.DiGraph()
     with input_stream() as f:
         for line in f:
             line = line.strip()
             state = process_line(state, line, parts.append)
     count = 0
     product = 1
-    for part in parts:
-        pass
+    entries = []
+    result = None
 
-    answer = None
-    if units:
-        answer = sum(solution(u) for u in unites)
+    if parts:
+        result = combine(parts)
     elif mapping:
-        answer = solution(mapping)
-    elif g:
-        answer = solution(g)
-    else:
-        raise Exception()
+        result = combine(mapping)
+    elif g.edges():
+        result = combine(g)
+    elif dg.edges():
+        result = combine(dg)
 
-    if os.environ.get('DEBUG'):
-        print(state)
-        for unit in units:
-            print units
-        for k, v in mapping.items():
-            print(k, v)
-        if g.nodes():
-            write_dot(g, sys.stdout)
-
-    return answer
+    return result
 
 class Tests(unittest.TestCase):
 
