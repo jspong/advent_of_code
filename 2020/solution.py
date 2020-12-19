@@ -12,7 +12,7 @@ import unittest
 import pygraphviz
 from networkx.drawing.nx_agraph import write_dot
 
-def process_line(state, line, handle, state_transition=lambda x, line: x):
+def process_line(state, line, handle):
     original = line
     part = None
     if state == 0:
@@ -32,6 +32,9 @@ def solution(line):
 
 def combine(results):
     return sum(solution(r) for r in results)
+
+def state_transition(state, line):
+    return state
 
 class Tests(unittest.TestCase):
 
