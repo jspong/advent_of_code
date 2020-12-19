@@ -3,7 +3,7 @@ import collections
 import itertools
 import math
 import operator
-import re
+import regex
 import sys
 import unittest
 
@@ -46,32 +46,71 @@ def process_line(state, line, handle):
         pass
     elif state == 3:
         pass
+    print(part)
     handle(part)
     return state_transition(state, original)
 
-def to_regex(rules, rule):
+repeat = object()
+
+step = ''
+def to_regex(rules, index, rule, depth = 0):
+    global step
+    if depth == 0:
+        step = ''
     r = ''
     if isinstance(rule, int):
-        return to_regex(rules, rules[rule])
+        if rule == index:
+            raise Exception
+        return to_regex(rules, index, rules[rule], depth=depth+1)
     elif isinstance(rule, str):
         return rule
+    elif isinstance(rule, list):
+        if not rule:
+            return ''
+        if isinstance(rule[0], list):
+            return '(?:' + '|'.join('(?:{})'.format(to_regex(rules, index, r, depth=depth+1)) for r in rule) + ')'
+        else:
+            for i, x in enumerate(rule):
+                if isinstance(x, str):
+                    r += x
+                else:
+                    if x == index:
+                        remaining = to_regex(rules, index, rule[i+1:], depth=depth+1)
+                        if remaining:
+                            step += 'a'
+                            return '(?P<c{}>((?:{})(?&c{})?(?:{})))'.format(step, r, step, remaining)
 
-    if isinstance(rule[0], list):
-        return '(' + '|'.join(to_regex(rules, r) for r in rule) + ')'
+                        else:
+                            return '(?:{})+'.format(r)
+                    else:
+                        r += to_regex(rules, x, rules[x], depth=depth+1)
     else:
-        for x in rule:
-            if isinstance(x, str):
-                r += x
-            elif isinstance(x, list):
-                r += to_regex(rules, rule)
-            else:
-                r += to_regex(rules, rules[x])
+        raise Exception(type(rule))
 
     return r
 
+EXPECTED = [
+"bbabbbbaabaabba",
+"babbbbaabbbbbabbbbbbaabaaabaaa",
+"aaabbbbbbaaaabaababaabababbabaaabbababababaaa",
+"bbbbbbbaaaabbbbaaabbabaaa",
+"bbbababbbbaaaaaaaabbababaaababaabab",
+"ababaaaaaabaaab",
+"ababaaaaabbbaba",
+"baabbaaaabbaaaababbaababb",
+"abbbbabbbbaaaababbbbbbaaaababb",
+"aaaaabbaabaaaaababaa",
+"aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
+"aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba"
+]
+
 def solution(line, rules):
-    r = to_regex(rules, rules[0]) + '$'
-    return int(re.match(r, line) is not None)
+    r = to_regex(rules, 0, rules[0]) + '$'
+    print(r[2000:])
+    result = int(regex.match(r, line) is not None)
+    if result and line not in EXPECTED:
+        print(line, result)
+    return result
 
 def combine(results, rules):
     return sum(solution(line, rules) for line in results)
