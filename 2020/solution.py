@@ -1,10 +1,13 @@
 #!/usr/local/bin/python3
 import collections
 import itertools
+import math
+import operator
+import os
 import re
 import networkx
 import pygraphviz
-from networkx.drawing.nx_graph import write_dot
+from networkx.drawing.nx_agraph import write_dot
 import sys
 import unittest
 
