@@ -46,7 +46,6 @@ def process_line(state, line, handle):
         pass
     elif state == 3:
         pass
-    print(part)
     handle(part)
     return state_transition(state, original)
 
@@ -89,27 +88,9 @@ def to_regex(rules, index, rule, depth = 0):
 
     return r
 
-EXPECTED = [
-"bbabbbbaabaabba",
-"babbbbaabbbbbabbbbbbaabaaabaaa",
-"aaabbbbbbaaaabaababaabababbabaaabbababababaaa",
-"bbbbbbbaaaabbbbaaabbabaaa",
-"bbbababbbbaaaaaaaabbababaaababaabab",
-"ababaaaaaabaaab",
-"ababaaaaabbbaba",
-"baabbaaaabbaaaababbaababb",
-"abbbbabbbbaaaababbbbbbaaaababb",
-"aaaaabbaabaaaaababaa",
-"aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
-"aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba"
-]
-
 def solution(line, rules):
     r = to_regex(rules, 0, rules[0]) + '$'
-    print(r[2000:])
     result = int(regex.match(r, line) is not None)
-    if result and line not in EXPECTED:
-        print(line, result)
     return result
 
 def combine(results, rules):
